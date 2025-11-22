@@ -83,9 +83,11 @@ export const login =async (req,res)=>{
 
 
 export const isAuth= async (req, res) => {
-    const token = req.cookies.token;
+    const token = req.cookies?.token;
     if (!token)
-        { return res.status(401).json({ error: 'Not authenticated' });
+        {
+             return res.status(401).json({ success: false, message: "Not authenticated (Cookie)" });
+
 }
   
     try {
@@ -93,9 +95,9 @@ export const isAuth= async (req, res) => {
     
       const user = await User.findById(decoded.id).select('-password');
       if (!user)
-        { return res.status(404).json({ error: 'User not found' });
+        { return res.status(404).json({ success: false, message: "User not found" });
        }else{
-        return res.json({success : true , user})// Includes user._id
+         return res.json({ success: true, user });  
       }
        
     } catch (err) {
